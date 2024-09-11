@@ -1,1 +1,104 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+}
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.h1 {
+    font-size: 2.5rem;
+    /* 40px */
+}
+
+.h2 {
+    font-size: 2rem;
+    /* 32px */
+}
+
+.h3 {
+    font-size: 1.75rem;
+    /* 28px */
+}
+
+.h4 {
+    font-size: 1.5rem;
+    /* 24px */
+}
+
+.h5 {
+    font-size: 1.25rem;
+    /* 20px */
+}
+
+.h6 {
+    font-size: 1rem;
+    /* 16px */
+}
+
+.sfocato {
+    backdrop-filter: blur(10px);
+}
