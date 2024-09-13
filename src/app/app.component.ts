@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,6 +7,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'vetrina-ristorante';
   currentTheme = 'dark'; // Imposta il tema di default
+
+ 
 
   toggleTheme() {
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';

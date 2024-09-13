@@ -16,6 +16,9 @@ import { JobsComponent } from './components/jobs/jobs.component';
 import { ContactComponent } from './components/contact/contact.component';
 
 
+
+
+
 const routes: Route[] = [
  
 ]
@@ -36,7 +39,7 @@ const routes: Route[] = [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
   providers: [],
   bootstrap: [AppComponent]

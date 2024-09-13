@@ -8,20 +8,19 @@ import { filter } from 'rxjs';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  currentTheme = 'dark'; // Imposta il tema di default
+  currentTheme = 'dark'; 
 
   isTransparent: boolean = false;
-  isHome: boolean = false; // Per controllare se siamo nella home
+  isHome: boolean = false;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.router.events
-      .pipe(filter((event: any) => event instanceof NavigationEnd)) // Solo quando la navigazione è finita
+      .pipe(filter((event: any) => event instanceof NavigationEnd))
       .subscribe(() => {
-        // Controlla se siamo nella Home
         this.isHome = this.router.url === '/';
-        this.isTransparent = this.isHome; // Solo sulla home è trasparente
+        this.isTransparent = this.isHome;
       });
   }
 
@@ -29,9 +28,8 @@ export class NavbarComponent {
   onWindowScroll() {
     const scrollOffset = window.pageYOffset;
 
-    // Solo sulla home, cambia trasparenza in base allo scroll
     if (this.isHome) {
-      this.isTransparent = scrollOffset <= 50; // Trasparente fino a 50px di scroll
+      this.isTransparent = scrollOffset <= 50;
     }
   }
   
