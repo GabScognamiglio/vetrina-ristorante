@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -13,7 +13,7 @@ export class NavbarComponent {
   isTransparent: boolean = false;
   isHome: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private renderer: Renderer2) {}
 
   ngOnInit(): void {
     this.router.events
@@ -36,6 +36,13 @@ export class NavbarComponent {
   toggleTheme() {
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', this.currentTheme);
+  }
+
+  closeDrawer() {
+    const drawerToggle = document.querySelector('#my-drawer-3') as HTMLInputElement;
+    if (drawerToggle) {
+      drawerToggle.checked = false;
+    }
   }
 
 }

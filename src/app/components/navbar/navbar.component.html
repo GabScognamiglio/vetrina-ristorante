@@ -51,11 +51,11 @@
           class="material-symbols-outlined">
           close
         </span></label>
-      <li for class="m-10 font-medium"><a class="h5" [routerLink]="['/menu']" routerLinkActive="active">Menu</a></li>
-      <li class="m-10"><a class="h5" [routerLink]="['/about']" routerLinkActive="active">About</a></li>
-      <li class="m-10"><a class="h5" [routerLink]="['/events']" routerLinkActive="active">Events</a></li>
-      <li class="m-10"><a class="h5" [routerLink]="['/jobs']" routerLinkActive="active">Jobs</a></li>
-      <li class="m-10"><a class="h5" [routerLink]="['/contact']" routerLinkActive="active">Contact</a></li>
+        <li class="m-10 font-medium"><a class="h5" [routerLink]="['/menu']" routerLinkActive="active" (click)="closeDrawer()">Menu</a></li>
+        <li class="m-10"><a class="h5" [routerLink]="['/about']" routerLinkActive="active" (click)="closeDrawer()">About</a></li>
+        <li class="m-10"><a class="h5" [routerLink]="['/events']" routerLinkActive="active" (click)="closeDrawer()">Events</a></li>
+        <li class="m-10"><a class="h5" [routerLink]="['/jobs']" routerLinkActive="active" (click)="closeDrawer()">Jobs</a></li>
+        <li class="m-10"><a class="h5" [routerLink]="['/contact']" routerLinkActive="active" (click)="closeDrawer()">Contact</a></li> 
     </ul>
   </div>
 </div>
