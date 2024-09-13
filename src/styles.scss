@@ -3,10 +3,19 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
+
 html,
 body {
     height: 100%;
     margin: 0;
+}
+
+.pacifico-regular {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 40px;
 }
 
 .app-container {
@@ -101,4 +110,42 @@ body {
 
 .sfocato {
     backdrop-filter: blur(10px);
+}
+
+
+
+@media (min-width: 1024px) {
+    #risto {
+        position: absolute;
+        top: 68px;
+        left: 54px;
+        font-size: 14px;
+        font-family: "Montserrat Alternates", sans-serif;
+        font-weight: 400;
+        font-style: italic;
+    }
+}
+
+@media (max-width: 1023px) {
+    #risto {
+        position: absolute;
+        top: 68px;
+        left: 102px;
+        font-size: 14px;
+        font-family: "Montserrat Alternates", sans-serif;
+        font-weight: 400;
+        font-style: italic;
+    }
+}
+
+.benvenuto{
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.monts-italic{
+    font-family: "Montserrat Alternates", sans-serif;
+        font-weight: 400;
+        font-style: italic;
 }

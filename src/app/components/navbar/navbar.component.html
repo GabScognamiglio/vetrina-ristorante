@@ -1,8 +1,10 @@
-<div class="drawer mb-16">
+<div class="drawer z-10" >
     <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
-      <div class="navbar bg-base-300 w-full" style="height: 82px;">
+      <div class="navbar w-full " class="navbar"
+      [ngClass]="{'bg-transparent text-gray-300': isTransparent, 'bg-base-300': !isTransparent}"
+      style="height: 102px; position: fixed; top: 0;">
         <div class="flex-none lg:hidden">
           <label for="my-drawer-3" aria-label="open sidebar" class="btn btn-square btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -11,7 +13,8 @@
             </svg>
           </label>
         </div>
-        <div class="mx-2 flex-1 px-2"><a [routerLink]="['']">Nome Ristorante Logo</a>
+        <div class="mx-2 flex-1 px-2"><a [routerLink]="['']" ><span class="pacifico-regular gabs">Gab's</span><br>
+        <span id="risto">Ristorante</span></a>
         </div>
         <div class="hidden flex-none lg:block">
           <ul class="menu menu-horizontal">
@@ -40,7 +43,7 @@
       </div>
   
     </div>
-    <div class="drawer-side ">
+    <div class="drawer-side z-50">
       <label for="my-drawer-3" class="drawer-overlay"></label>
       <ul class="menu bg-transparent sfocato min-h-full p-4 w-full justify-center" style="align-items: center;"
         aria-label="close sidebar">
