@@ -1,6 +1,7 @@
 import { Component, HostListener, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { ThemeService } from 'src/app/service/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,7 @@ export class NavbarComponent {
   isTransparent: boolean = false;
   isHome: boolean = false;
 
-  constructor(private router: Router, private renderer: Renderer2) {}
+  constructor(private router: Router, private themeService: ThemeService) {}
 
   ngOnInit(): void {
     this.router.events
@@ -36,6 +37,9 @@ export class NavbarComponent {
   toggleTheme() {
     this.currentTheme = this.currentTheme === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', this.currentTheme);
+    
+    // Aggiorna il tema tramite il servizio
+    this.themeService.setTheme(this.currentTheme);
   }
 
   closeDrawer() {

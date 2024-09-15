@@ -14,6 +14,7 @@ import { AboutComponent } from './components/about/about.component';
 import { EventsComponent } from './components/events/events.component';
 import { JobsComponent } from './components/jobs/jobs.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 
@@ -40,6 +41,7 @@ const routes: Route[] = [
     AppRoutingModule,
     FormsModule,
     RouterModule.forRoot(routes),
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
