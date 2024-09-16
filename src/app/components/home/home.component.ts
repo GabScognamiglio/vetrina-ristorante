@@ -17,5 +17,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  
+  openPDF(){
+    const pdfUrl= "../../../assets/docs/prova_menu.pdf"
+    window.open( pdfUrl, '_blank');
+  }
 
 }

@@ -1,1 +1,51 @@
-<p style="height: 1000px;">menu works!</p>
+<div class="container">
+    <section id="contact">
+        <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+            <div class="mb-4">
+                <div class="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
+                    <p class="text-base font-semibold uppercase tracking-wide">
+                        Menu
+                    </p>
+                    <h2 class=" mb-4 font-bold tracking-tight text-5xl">
+                        Le nostre prelibatezze
+                    </h2>
+                    <p class="monts-italic mt-10">
+                        "Da noi, la carne è protagonista. Ogni taglio viene selezionato con cura e cucinato alla
+                        perfezione, esaltandone i sapori autentici. Dalla classica Fiorentina alla tenera costata, ogni
+                        boccone è un'esperienza indimenticabile. Accompagna la tua cena con un calice dei nostri vini
+                        pregiati, selezionati tra le migliori cantine italiane e internazionali. E per chi ama un tocco
+                        di originalità, i nostri cocktail artigianali sono la scelta perfetta per un aperitivo o un dopo
+                        cena indimenticabile."
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+</div>
+<div class="bg-base-200">
+    <div class="container flex flex-col lg:flex-row text-center h-auto lg:min-h-96 p-10">
+        <div class=" lg:w-1/3 m-8 relative group overflow-hidden bg-cover bg-center"
+            style="background-image: url('../../../assets/images/bistecca.jpg'); min-height: 320px; cursor: pointer; "  (click)="openPDF()">
+            <div class="relative z-10 flex items-center justify-center h-full bg-opacity-40 group-hover:bg-opacity-0 transition-all duration-300"
+                [ngClass]="currentTheme == 'dark' ? 'bg-black' : 'bg-white'" style="min-height: 320px;">
+                <button class="btn btn-warning rounded-none">MENU CENA</button>
+            </div>
+        </div>
+        <div class=" lg:w-1/3 m-8 relative group overflow-hidden bg-cover bg-center"
+            style="background-image: url('../../../assets/images/cocktails.jpg'); min-height: 320px; cursor: pointer;"  (click)="openPDF()">
+            <div class="relative z-10 flex items-center justify-center h-full bg-black bg-opacity-40 group-hover:bg-opacity-0 transition-all duration-300"
+                [ngClass]="currentTheme == 'dark' ? 'bg-black' : 'bg-white'" style="min-height: 320px;">
+                <button class="btn btn-warning rounded-none">COCKTAILS</button>
+            </div>
+        </div>
+        <div class=" lg:w-1/3 m-8 relative group overflow-hidden bg-cover bg-center"
+            style="background-image: url('../../../assets/images/vini.jpg'); min-height: 320px; cursor: pointer;"  (click)="openPDF()">
+            <div class="relative z-10 flex items-center justify-center h-full bg-black bg-opacity-40 group-hover:bg-opacity-0 transition-all duration-300"
+                [ngClass]="currentTheme == 'dark' ? 'bg-black' : 'bg-white'" style="min-height: 320px;">
+                <button class="btn btn-warning rounded-none">CARTA DEI VINI</button>
+            </div>
+        </div>
+    </div>
+</div>
