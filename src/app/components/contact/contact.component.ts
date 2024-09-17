@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactFormService } from 'src/app/service/contact-form.service';
 import { ThemeService } from 'src/app/service/theme.service';
@@ -15,7 +15,7 @@ export class ContactComponent {
   contactForm!: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
-
+  
 
   lightMapStyle: google.maps.MapTypeStyle[] = [
     {

@@ -1,13 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactFormService {
 
-  contactFormURL= "http://localhost:8080/contact"
+  contactFormURL= environment.apiUrl + '/contact'
 
   constructor(private http: HttpClient) { }
 

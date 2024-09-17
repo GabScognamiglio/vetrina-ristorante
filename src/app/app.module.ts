@@ -17,6 +17,8 @@ import { JobsComponent } from './components/jobs/jobs.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 
+import { environment } from 'src/environments/environment';
+
 
 
 

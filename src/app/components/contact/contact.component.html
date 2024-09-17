@@ -177,9 +177,11 @@
                     </div>
                 </div>
             </div>
+            
         </div>
+        
     </section>
 </div>
-<google-map height="400px" width="100%" [center]="center" [zoom]="zoom" [options]="mapOptions">
+<google-map #mapContainer id="mapContainer" height="400px" width="100%" [center]="center" [zoom]="zoom" [options]="mapOptions">
     <map-marker [position]="markerPosition"></map-marker>
 </google-map>
