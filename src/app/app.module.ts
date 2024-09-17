@@ -43,7 +43,8 @@ const routes: Route[] = [
     FormsModule,
     RouterModule.forRoot(routes),
     GoogleMapsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

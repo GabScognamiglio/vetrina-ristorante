@@ -9,10 +9,43 @@
                     <h2 class=" mb-4 font-bold tracking-tight text-5xl">
                         Lavora con noi
                     </h2>
-                    <p class="monts-italic mt-10" *ngIf="jobs.length===0">
+                    <p class="monts-italic mt-10" *ngIf="jobs.length===0 && !caricamento">
                         Al momento non ci sono offerte di lavoro.
                     </p>
-                    <p *ngIf="jobs.length>0">LISTA DELLE OFFERTE DI LAVORO da prendere a DB</p>
+
+                    <div *ngIf="caricamento" class="mt-32 h-96">
+                        <span class="loading loading-ring loading-lg"></span>
+                    </div>
+
+                    <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+                        <div class="modal-box">
+                          <h3 class="text-lg font-bold">Inviaci il tuo CV!</h3>
+                          <p class="py-4">Per candidarti invia il tuo Curriculum Vitae al seguente indirizzo email:</p>
+                          <p class="py-4 text-warning"><a href="mailto:[email protected]?subject=Richiesta%20informazioni&body=Sono%20interessato%20a...">gabsrestaurant&#64;gmail.com</a></p>
+                          <div class="modal-action">
+                            <form method="dialog">
+                              <button class="btn">Close</button>
+                            </form>
+                          </div>
+                        </div>
+                      </dialog>
+
+                    <div *ngIf="jobs.length>0 && !caricamento" class="mt-10">
+                        <div *ngFor="let offer of jobs">
+                            <div class="card bg-base-200">
+                                <div class="card-body text-start">
+                                    <h2 class="card-title h4">{{offer.title}}</h2>
+                                    <p><span class="font-bold">DESCRIZIONE:</span> {{offer.description}}</p>
+                                    <p><span class="font-bold">TIPO:</span> {{offer.employmentType}}</p>
+                                    <p><span class="font-bold">STIPENDIO:</span> {{offer.salary}} €</p>
+                                    <div class="card-actions flex justify-between mt-10" style="align-items: center;">
+                                        <span><span class="font-bold">DATA:</span> {{offer.postingDate}}</span>
+                                        <button class="btn rounded-none btn-warning" onclick="my_modal_5.showModal()">CANDIDATI</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

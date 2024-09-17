@@ -77,7 +77,37 @@
                     </div>
                     <div class="card h-fit max-w-6xl p-5 lg:p-12" id="form">
                         <h2 class="mb-4 text-2xl font-bold">Pronto a contattarci?</h2>
-                        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+
+                        <!-- Alert di successo -->
+                        <div role="alert" class="alert alert-success flex flex-row justify-between my-3"
+                            *ngIf="successMessage">
+                            <div class="flex flex-row">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="ms-4">{{successMessage}}</span>
+                            </div>
+                            <button type="button" class="btn btn-ghost" (click)="successMessage = null">X</button>
+                        </div>
+
+                        <!-- Alert di errore -->
+
+                        <div role="alert" class="alert alert-error flex flex-row justify-between my-3" *ngIf="errorMessage">
+                            <div class="flex flex-row">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="ms-4">{{errorMessage}}</span>
+                            </div>
+                            <button type="button" class="btn btn-ghost" (click)="errorMessage = null">X</button>
+                        </div>
+
+
+                        <form [formGroup]="contactForm" onsubmit="my_modal_5.showModal()">
                             <div class="mb-6">
                                 <div class="mx-0 mb-1 sm:mb-4">
                                     <div class="mx-0 mb-1 sm:mb-4">
@@ -111,7 +141,7 @@
                                 <div class="mx-0 mb-1 sm:mb-4">
                                     <label for="textarea"
                                         class="pb-1 text-xs uppercase tracking-wider">Messaggio</label>
-                                    <textarea id="textarea" formControlName="textarea" cols="30" rows="5"
+                                    <textarea id="message" formControlName="message" cols="30" rows="5"
                                         placeholder="Scrivi il tuo messaggio..."
                                         class="mb-2 w-full py-2 pl-2 pr-4 border border-gray-700"></textarea>
                                     <div
@@ -124,9 +154,25 @@
 
                                 </div>
                             </div>
+                            <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle ">
+                                <div class="modal-box rounded-none">
+                                    <h3 class="text-lg font-bold">Invio modulo di contatto</h3>
+                                    <p class="py-4">Sei sicuro di voler inviare il messaggio?</p>
+                                    <div class="modal-action">
+                                        <form method="dialog">
+                                            <!-- if there is a button in form, it will close the modal -->
+                                             <button type="submit" class="btn btn-warning rounded-none m-2" (click)="sendForm(contactForm)">INVIA</button>
+                                            <button class="btn rounded-none">Close</button>
+    
+                                        </form>
+                                    </div>
+                                </div>
+                            </dialog>
                             <div class="text-center">
-                                <button type="submit" class="w-full btn btn-warning rounded-none">INVIA</button>
+                                <button class="w-full btn btn-warning rounded-none"
+                                    [disabled]="contactForm.invalid" onclick="my_modal_5.showModal()">INVIA</button>
                             </div>
+                            
                         </form>
                     </div>
                 </div>

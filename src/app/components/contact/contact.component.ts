@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ContactFormService } from 'src/app/service/contact-form.service';
 import { ThemeService } from 'src/app/service/theme.service';
 
 @Component({
@@ -12,6 +13,8 @@ export class ContactComponent {
   zoom = 16;
   markerPosition: google.maps.LatLngLiteral = { lat: 41.771722, lng: 12.230056 };
   contactForm!: FormGroup;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
 
   lightMapStyle: google.maps.MapTypeStyle[] = [
@@ -141,11 +144,11 @@ export class ContactComponent {
 
 
 
-  constructor(private themeService: ThemeService, private fb: FormBuilder) {
+  constructor(private themeService: ThemeService, private fb: FormBuilder, private contactFormSrv: ContactFormService) {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      textarea: ['', [Validators.required]]
+      message: ['', [Validators.required]]
     });
   }
 
@@ -155,10 +158,24 @@ export class ContactComponent {
     });
   }
 
-  onSubmit() {
-    if (this.contactForm.valid) {
-      console.log(this.contactForm.value); //IMPLEMENTARE CODICE PER MANDARLO A BACKEND
-      this.contactForm.reset();
+  sendForm(contactForm: FormGroup) {
+    if (contactForm.valid) {
+      this.contactFormSrv.saveContactForm(contactForm.value).subscribe({
+        next: (response) => {
+          // Successo
+          console.log("Modulo inviato con successo", response);
+          this.successMessage = "Modulo inviato con successo!";
+          this.errorMessage = null;
+        },
+        error: (error) => {
+          // Errore
+          console.error("Errore nell'invio del modulo:", error.message);
+          this.errorMessage = "Errore nell'invio del modulo: " + error.message;
+          this.successMessage = null;
+        }
+      });
     }
+    console.log(contactForm.value);
+    contactForm.reset();
   }
 }
