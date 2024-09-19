@@ -6,6 +6,7 @@ import { AboutComponent } from './components/about/about.component';
 import { EventsComponent } from './components/events/events.component';
 import { JobsComponent } from './components/jobs/jobs.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { MappaTavoliComponent } from './components/mappa-tavoli/mappa-tavoli.component';
 
 const routes: Route[] = [
   {
@@ -31,6 +32,11 @@ const routes: Route[] = [
   {
     path: 'menu',
     component: MenuComponent,
+  },
+
+  {
+    path: 'prenota',
+    component: MappaTavoliComponent,
   },
   
   {

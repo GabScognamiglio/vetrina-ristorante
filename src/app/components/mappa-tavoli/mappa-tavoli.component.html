@@ -1,0 +1,46 @@
+<div class="map-container">
+    <svg width="600" height="400" viewBox="0 0 600 400">
+      <!-- Tavoli -->
+      <g *ngFor="let table of tables" (click)="selectTable(table.id)">
+        <!-- Tavolo arrotondato -->
+        <rect [attr.x]="table.x"
+              [attr.y]="table.y"
+              [attr.width]="table.width"
+              [attr.height]="table.height"
+              rx="10" ry="10"
+              [attr.fill]="table.available ? 'green' : 'red'"
+              [attr.stroke]="selectedTable === table.id ? 'blue' : 'black'"
+              [attr.stroke-width]="selectedTable === table.id ? 3 : 1">
+        </rect>
+  
+        <!-- Sedie attorno al tavolo -->
+        <circle *ngFor="let chair of table.chairs"
+                [attr.cx]="chair.cx"
+                [attr.cy]="chair.cy"
+                r="10"
+                fill="lightgray"
+                stroke="black"
+                stroke-width="1">
+        </circle>
+      </g>
+    </svg>
+  </div>
+
+
+  <!doctype html>
+<svg viewBox="5.161 6.881 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect  x="65.654" y="53.326" width="384.748" height="380.16" style="stroke: rgb(0, 0, 0); fill: rgb(121, 121, 121);"click></rect>
+  <rect x="180" y="75" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="366" y="75" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="366" y="140" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="366" y="218.75" width="58.486" height="197.821" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="85" y="75" width="58.486" height="47.592" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" rx="15" ry="15"click></rect>
+  <rect x="85" y="140" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="85" y="270" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="180" y="270" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="180" y="205" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="85" y="205" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="87.156" y="356.938" width="146.789" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+  <rect x="180" y="140" width="58.486" height="47.592" rx="15" ry="15" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);"click></rect>
+</svg>
+  

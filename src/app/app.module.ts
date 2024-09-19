@@ -18,6 +18,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 import { environment } from 'src/environments/environment';
+import { MappaTavoliComponent } from './components/mappa-tavoli/mappa-tavoli.component';
 
 
 
@@ -37,7 +38,8 @@ const routes: Route[] = [
     AboutComponent,
     EventsComponent,
     JobsComponent,
-    ContactComponent
+    ContactComponent,
+    MappaTavoliComponent
   ],
   imports: [
     BrowserModule,
