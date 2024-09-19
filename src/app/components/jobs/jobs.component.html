@@ -18,13 +18,13 @@
                     </div>
 
                     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-                        <div class="modal-box">
+                        <div class="modal-box" style="border-radius: 0;">
                           <h3 class="text-lg font-bold">Inviaci il tuo CV!</h3>
                           <p class="py-4">Per candidarti invia il tuo Curriculum Vitae al seguente indirizzo email:</p>
                           <p class="py-4 text-warning"><a href="mailto:[email protected]?subject=Richiesta%20informazioni&body=Sono%20interessato%20a...">gabsrestaurant&#64;gmail.com</a></p>
                           <div class="modal-action">
                             <form method="dialog">
-                              <button class="btn">Close</button>
+                              <button class="btn rounded-none">Close</button>
                             </form>
                           </div>
                         </div>
@@ -32,7 +32,7 @@
 
                     <div *ngIf="jobs.length>0 && !caricamento" class="mt-10">
                         <div *ngFor="let offer of jobs">
-                            <div class="card bg-base-200">
+                            <div class="card bg-base-200 rounded-none">
                                 <div class="card-body text-start">
                                     <h2 class="card-title h4">{{offer.title}}</h2>
                                     <p><span class="font-bold">DESCRIZIONE:</span> {{offer.description}}</p>

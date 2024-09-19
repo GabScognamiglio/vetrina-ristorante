@@ -1,8 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
 
 
 html,
@@ -84,32 +82,26 @@ body {
 
 .h1 {
     font-size: 2.5rem;
-    /* 40px */
 }
 
 .h2 {
     font-size: 2rem;
-    /* 32px */
 }
 
 .h3 {
     font-size: 1.75rem;
-    /* 28px */
 }
 
 .h4 {
     font-size: 1.5rem;
-    /* 24px */
 }
 
 .h5 {
     font-size: 1.25rem;
-    /* 20px */
 }
 
 .h6 {
     font-size: 1rem;
-    /* 16px */
 }
 
 .blurred {
@@ -120,8 +112,6 @@ body {
 .blackened {
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
-
-
 
 @media (min-width: 1024px) {
     #risto {
@@ -166,7 +156,7 @@ body {
     transition: all 0.5s;
 }
 
-.btn:hover {
+.btn:hover, .btn:hover * {
     transform: scale(1.1);
-    transition: all 0.5s;
+    transition: all 0.3s;
 }
