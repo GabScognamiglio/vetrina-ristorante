@@ -57,7 +57,7 @@
 
     <!-- Messaggio di non disponibilità -->
     <ng-template #notAvailable>
-      <p class="py-4">Il tavolo {{selectedTable.id}} non è disponibile all'ora selezionata.</p>
+      <p class="py-4">Il tavolo non è disponibile all'ora selezionata.</p>
     </ng-template>
 
     <div class="modal-action">
@@ -74,21 +74,30 @@
     <div class="p-4 flex">
       <div class="mb-4 me-10">
         <label for="datePicker" class="block text-gray-700">Select Date:</label>
-        <input type="date" id="datePicker" [(ngModel)]="selectedDate" (change)="updateAvailability()"
-          class="input input-bordered w-full max-w-xs" />
+        <input
+        type="date"
+        id="datePicker"
+        [(ngModel)]="selectedDate"
+        (change)="onDateChange()"
+        class="input input-bordered w-full max-w-xs"
+        [min]="minDate"
+      />
       </div>
 
       <div class="mb-4">
         <label for="timeSelect" class="block text-gray-700">Select Time:</label>
         <select id="timeSelect" [(ngModel)]="selectedTime" (change)="updateAvailability()"
           class="select select-bordered w-full max-w-xs">
-          <option *ngFor="let time of getOrariDisponibili()" [value]="time">{{ time }}</option>
+          <option *ngFor="let time of orari; let i = index" [value]="time" [selected]="i == 0">{{ time }}</option>
         </select>
       </div>
     </div>
-    <svg viewBox="-200.309 -10.467 836.103 504.9611" xmlns="http://www.w3.org/2000/svg" style="border: 0;"
-      class="bg-base-300 p-5">
-      <g (click)="checkDisponibilitaTavolo(tavoli[6])" id="7" [(ngModel)]="tavoli[6]"
+    <div *ngIf="caricamento" class="mt-32 h-96 text-center">
+      <span class="loading loading-ring loading-lg"></span>
+    </div>
+    <svg *ngIf="tavoli.length == 15" [ngStyle]="{display: caricamento? 'none' : 'block'}" viewBox="-200.309 -10.467 836.103 504.9611" xmlns="http://www.w3.org/2000/svg"
+      style="border: 0;" class="bg-base-300 p-5">
+      <g (click)="checkDisponibilitaTavolo(tavoli[6])" id="7"
         transform="matrix(1, 0, 0, 1, -1, -23)">
         <rect [ngStyle]="{ fill: tavoli[6].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
           stroke="black" stroke-width="2"></rect>
