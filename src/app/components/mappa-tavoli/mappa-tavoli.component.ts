@@ -1,5 +1,8 @@
 import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { FormGroup, NgForm } from '@angular/forms';
 import { PrenotazioniService } from 'src/app/service/prenotazioni.service';
+import { DisponibilitaTavolo } from 'src/interface/disponibilita-tavolo';
+import { PrenotazioneDTO } from 'src/interface/prenotazione-dto';
 
 @Component({
   selector: 'app-mappa-tavoli',
@@ -9,15 +12,24 @@ import { PrenotazioniService } from 'src/app/service/prenotazioni.service';
 export class MappaTavoliComponent {
 
   selectedDate: string;
-  selectedTime: string = '13:00';
+  orari = ["13:00", "14:30", "18:00", "20:00", "21:30"];
+  selectedTime!: string
   isTableAvailable: boolean = false;
-  selectedTable: any
-  tavoli: any[] = []
+  selectedTable!: DisponibilitaTavolo;
+  tavoli: any[] = [];
   caricamento = true;
   minDate: string;
-  orari = [
-    "13:00", "14:30", "18:00", "20:00", "21:30"
-  ];
+  formPrenotazione!: NgForm;
+  persone!: number;
+  nome!: string;
+  email!: string;
+  numeroTel!: string;
+  minPersone: number = 1;
+  maxPersone: number = 10;
+  isModalVisible = false; 
+  modalMessage = ''; 
+  modalType = ''; 
+
 
   constructor(private prenotazioniSrv: PrenotazioniService, private cd: ChangeDetectorRef) {
     const today = new Date();
@@ -26,20 +38,19 @@ export class MappaTavoliComponent {
   }
 
   ngOnInit() {
-    this.prenotazioniSrv.getDisponibilita(this.selectedDate).subscribe((data) => {
-      this.tavoli = data;
-      this.updateAvailability()
-    })
-    setTimeout(() => {
-      this.caricamento = false
-    }, 800);
+    this.refreshPrenotazioni();
   }
 
-  onDateChange() {
+  refreshPrenotazioni() {
     this.prenotazioniSrv.getDisponibilita(this.selectedDate).subscribe((data) => {
       this.tavoli = data;
+      this.eliminaOrariPassati()
       this.updateAvailability();
+
     });
+    setTimeout(() => {
+      this.caricamento = false;
+    }, 800);
   }
 
   updateAvailability() {
@@ -52,41 +63,90 @@ export class MappaTavoliComponent {
     });
   }
 
-  getOrariDisponibili(): string[] {
-    return this.tavoli[0] ? Object.keys(this.tavoli[0].disponibilita) : [];
+  eliminaOrariPassati() {
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];; // Formatta la data odierna nel formato YYYY-MM-dd
+
+    if (this.selectedDate === formattedToday) {
+      const currentHour = today.getHours();
+
+      this.orari = this.orari.filter(orario => {
+        const [hour] = orario.split(':').map(Number);
+        return hour >= currentHour;
+      });
+    }
+    else {
+      this.orari=["13:00", "14:30", "18:00", "20:00", "21:30"]
+    }
+    this.selectedTime = this.orari[0]
   }
+
+  onDateChange() {
+    this.prenotazioniSrv.getDisponibilita(this.selectedDate).subscribe((data) => {
+      this.tavoli = data;
+      
+      this.updateAvailability();this.eliminaOrariPassati()
+
+    });
+  }
+
+
 
   checkDisponibilitaTavolo(tavolo: any) {
-    this.selectedTable = tavolo
-    if (this.selectedTime && tavolo.disponibilita[this.selectedTime]) {
-      this.isTableAvailable = true;
-    } else {
-      this.isTableAvailable = false;
-    }
+    this.selectedTable = tavolo;
+    this.isTableAvailable = this.selectedTime && tavolo.disponibilita[this.selectedTime];
+    this.updatePersoneLimits();
     document.getElementById('my-modal')!.click();
   }
+
+  creaPrenotazione(form: NgForm) {
+    const prenotazione: PrenotazioneDTO = {
+      tavoloId: this.selectedTable.id,
+      data: this.selectedDate,
+      ora: this.selectedTime,
+      persone: this.persone,
+      nome: this.nome,
+      email: this.email,
+      numeroTel: this.numeroTel
+    };
+
+    this.prenotazioniSrv.creaPrenotazione(prenotazione).subscribe(
+      (response) => {
+        this.modalMessage = 'Prenotazione effettuata con successo!';
+        this.modalType = 'success';
+      },
+      (error) => {
+        this.modalMessage = 'Si è verificato un errore durante la prenotazione.';
+        this.modalType = 'error';
+        console.error(error);
+      }
+    );
+    setTimeout(() => {
+
+      window.location.reload()
+    }, 2500);
+  }
+
+
+
+  updatePersoneLimits() {
+    if (this.selectedTable) {
+      const tavoloId = this.selectedTable.id;
+      if (tavoloId >= 1 && tavoloId <= 3) {
+        this.minPersone = 6;
+        this.maxPersone = 10;
+      } else if (tavoloId >= 4 && tavoloId <= 9) {
+        this.minPersone = 3;
+        this.maxPersone = 6;
+      } else if (tavoloId >= 10 && tavoloId <= 15) {
+        this.minPersone = 1;
+        this.maxPersone = 2;
+      }
+    }
+    this.persone = this.minPersone;
+  }
+
+
+
 }
-
-
-
-
-
-
-// tavoli: any[] = [
-//   { id: 1, disponibilita: { '10:00': true, '11:00': false, '12:00': true, '13:00': true, '14:00': false } },
-//   { id: 2, disponibilita: { '10:00': false, '11:00': true, '12:00': true, '13:00': false, '14:00': true } },
-//   { id: 3, disponibilita: { '10:00': true, '11:00': true, '12:00': false, '13:00': true, '14:00': true } },
-//   { id: 4, disponibilita: { '10:00': false, '11:00': true, '12:00': true, '13:00': true, '14:00': false } },
-//   { id: 5, disponibilita: { '10:00': true, '11:00': true, '12:00': false, '13:00': false, '14:00': true } },
-//   { id: 6, disponibilita: { '10:00': true, '11:00': false, '12:00': true, '13:00': true, '14:00': true } },
-//   { id: 7, disponibilita: { '10:00': false, '11:00': true, '12:00': true, '13:00': false, '14:00': true } },
-//   { id: 8, disponibilita: { '10:00': true, '11:00': true, '12:00': false, '13:00': true, '14:00': true } },
-//   { id: 9, disponibilita: { '10:00': false, '11:00': true, '12:00': true, '13:00': false, '14:00': false } },
-//   { id: 10, disponibilita: { '10:00': true, '11:00': false, '12:00': true, '13:00': true, '14:00': true } },
-//   { id: 11, disponibilita: { '10:00': true, '11:00': true, '12:00': false, '13:00': false, '14:00': true } },
-//   { id: 12, disponibilita: { '10:00': false, '11:00': true, '12:00': true, '13:00': true, '14:00': false } },
-//   { id: 13, disponibilita: { '10:00': true, '11:00': true, '12:00': true, '13:00': false, '14:00': true } },
-//   { id: 14, disponibilita: { '10:00': false, '11:00': true, '12:00': true, '13:00': true, '14:00': true } },
-//   { id: 15, disponibilita: { '10:00': true, '11:00': false, '12:00': true, '13:00': false, '14:00': true } }
-// ];
 

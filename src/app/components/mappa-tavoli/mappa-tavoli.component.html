@@ -21,230 +21,274 @@
 </div>
 
 <!--MODALE-->
-<!-- Modale -->
 <input type="checkbox" id="my-modal" class="modal-toggle" />
-<div class="modal" style="border: 0;">
+<div class="modal modal-bottom sm:modal-middle" style="border: 0;">
   <div class="modal-box" style="border-radius: 0;">
     <h3 class="font-bold text-lg">Prenotazione Tavolo</h3>
 
+    <!--ALERT conferma o errore-->
+    <div *ngIf="modalType === 'success'" class="alert alert-success my-5">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span class="ml-2 font-medium">
+        {{ modalMessage }}
+      </span>
+    </div>
+
+    <div *ngIf="modalType === 'error'" class="alert alert-error my-5">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round"   stroke-linejoin="round" stroke-width="2"
+          d="M10.9   
+   14.82a5.62 5.62 0 010 7.74 5.62 5.62 0 01-7.74 0 5.62 5.62 0 107.74-7.74zM19.42 8.33a5.62 5.62 0 010-7.74 5.62 5.62 0 017.74 0 5.62 5.62 0 10-7.74 7.74z" />
+      </svg>
+      <span class="ml-2 font-medium">
+        {{ modalMessage }}
+      </span>
+    </div>
+
     <div *ngIf="isTableAvailable; else notAvailable">
-      <p class="py-4">Il tavolo {{selectedTable.id}} è disponibile all'ora selezionata.</p>
-      <div>
-        <label class="form-control w-full max-w-xs">
-          <div class="label">
-            <span class="label-text">Numero di persone</span>
-          </div>
-          <input type="number" placeholder="1" class="input input-bordered w-full max-w-xs" />
-        </label>
-      </div>
-      <div>
-        <label class="form-control w-full max-w-xs">
-          <div class="label">
-            <span class="label-text">Nome</span>
-          </div>
-          <input type="text" placeholder="Mario Rossi" class="input input-bordered w-full max-w-xs" />
-        </label>
-      </div>
-      <div>
-        <label class="form-control w-full max-w-xs">
-          <div class="label">
-            <span class="label-text">Telefono</span>
-          </div>
-          <input type="text" placeholder="es: 0665656565" class="input input-bordered w-full max-w-xs" />
-        </label>
-      </div>
+      <p class="py-4" *ngIf="!modalMessage">Il tavolo {{selectedTable.id}} (per {{minPersone}} - {{maxPersone}} persone)
+        è disponibile alle
+        {{selectedTime}} del {{selectedDate | date:'dd/MM/yyyy'}}</p>
+      <form *ngIf="!modalMessage" #formPrenotazione="ngForm" (ngSubmit)="creaPrenotazione(formPrenotazione.value)">
+        <!-- Numero di persone -->
+        <div class="form-group mb-4">
+          <label for="persone" class="block text-gray-700">Numero di persone:</label>
+          <input type="number" id="persone" name="persone" [(ngModel)]="persone" [min]="minPersone" [max]="maxPersone"
+            class="input input-bordered w-full max-w-xs" required />
+        </div>
+
+        <!-- Nome -->
+        <div class="form-group mb-4">
+          <label for="nome" class="block text-gray-700">Nome:</label>
+          <input type="text" id="nome" name="nome" [(ngModel)]="nome" class="input input-bordered w-full max-w-xs"
+            required />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group mb-4">
+          <label for="email" class="block text-gray-700">Email:</label>
+          <input type="email" id="email" name="email" [(ngModel)]="email" class="input input-bordered w-full max-w-xs"
+            required />
+        </div>
+
+        <!-- Numero di telefono -->
+        <div class="form-group mb-4">
+          <label for="numeroTel" class="block text-gray-700">Numero di telefono:</label>
+          <input type="tel" id="numeroTel" name="numeroTel" [(ngModel)]="numeroTel"
+            class="input input-bordered w-full max-w-xs" required />
+        </div>
+        <div class="modal-action">
+          <button for="my-modal" type="submit" class="btn rounded-none btn-warning" *ngIf="isTableAvailable"
+            [disabled]="formPrenotazione.invalid">PRENOTA</button>
+          <label for="my-modal" class="btn rounded-none">Chiudi</label>
+        </div>
+      </form>
+
     </div>
 
     <!-- Messaggio di non disponibilità -->
     <ng-template #notAvailable>
       <p class="py-4">Il tavolo non è disponibile all'ora selezionata.</p>
+      <div class="modal-action">
+        <label for="my-modal" class="btn rounded-none">Chiudi</label>
+      </div>
     </ng-template>
 
-    <div class="modal-action">
-      <button class="btn rounded-none btn-warning" *ngIf="isTableAvailable">PRENOTA</button>
-      <label for="my-modal" class="btn rounded-none">Chiudi</label>
-    </div>
+
   </div>
 </div>
 
 
 <div class="w-full max-w-full" style="max-width: 1000px; margin: 30px auto;">
-  <h4 class="h4 text-center" style="margin-bottom: 40px;">MAPPA TAVOLI</h4>
+  <h4 class="h4 text-center font-bold" style="margin-bottom: 40px;">MAPPA TAVOLI</h4>
   <div>
-    <div class="p-4 flex">
-      <div class="mb-4 me-10">
-        <label for="datePicker" class="block text-gray-700">Select Date:</label>
-        <input
-        type="date"
-        id="datePicker"
-        [(ngModel)]="selectedDate"
-        (change)="onDateChange()"
-        class="input input-bordered w-full max-w-xs"
-        [min]="minDate"
-      />
+    <div class="p-4 flex justify-between flex-wrap" style="align-items: center;">
+      <div class="flex">
+        <div class="mb-4 me-10">
+          <label for="datePicker" class="block mb-3 ms-1 font-bold">Scegli il giorno:</label>
+          <input type="date" id="datePicker" [(ngModel)]="selectedDate" (change)="onDateChange()"
+            class="input input-bordered w-full max-w-xs" [min]="minDate" />
+        </div>
+  
+        <div class="mb-4">
+          <label for="timeSelect" class="block mb-3 ms-1 font-bold">Orario:</label>
+          <select id="timeSelect" [(ngModel)]="selectedTime" (change)="updateAvailability()"
+            class="select select-bordered w-full max-w-xs">
+            <option *ngFor="let time of orari;" [value]="time">{{ time }}</option>
+          </select>
+        </div>
       </div>
 
-      <div class="mb-4">
-        <label for="timeSelect" class="block text-gray-700">Select Time:</label>
-        <select id="timeSelect" [(ngModel)]="selectedTime" (change)="updateAvailability()"
-          class="select select-bordered w-full max-w-xs">
-          <option *ngFor="let time of orari; let i = index" [value]="time" [selected]="i == 0">{{ time }}</option>
-        </select>
+      <div class="text-xs ms-3 text-center">
+        <p class="font-bold">Legenda:</p>
+        <p>Tavoli 1-3 : dai 6 ai 10 posti</p>
+        <p>Tavoli 4-9 : dai 3 ai 6 posti</p>
+        <p>Tavoli 1-3 : 1-2 posti</p>
       </div>
     </div>
     <div *ngIf="caricamento" class="mt-32 h-96 text-center">
       <span class="loading loading-ring loading-lg"></span>
     </div>
-    <svg *ngIf="tavoli.length == 15" [ngStyle]="{display: caricamento? 'none' : 'block'}" viewBox="-200.309 -10.467 836.103 504.9611" xmlns="http://www.w3.org/2000/svg"
-      style="border: 0;" class="bg-base-300 p-5">
-      <g (click)="checkDisponibilitaTavolo(tavoli[6])" id="7"
-        transform="matrix(1, 0, 0, 1, -1, -23)">
-        <rect [ngStyle]="{ fill: tavoli[6].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
-          stroke="black" stroke-width="2"></rect>
-        <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          7</text>
-        <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g transform="matrix(1, 0, 0, 1, 1, 0)">
-        <g (click)="checkDisponibilitaTavolo(tavoli[9])" id="10" transform="matrix(1, 0, 0, 1, -23.796585, -15)">
-          <rect [ngStyle]="{ fill: tavoli[9].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
-            height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-          <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 10</text>
-          <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-          <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+
+    <div style="width: 100%;overflow-x: scroll;">
+      <svg *ngIf="tavoli.length == 15" [ngStyle]="{display: caricamento? 'none' : 'block'}"
+        viewBox="-200.309 -10.467 836.103 504.9611" xmlns="http://www.w3.org/2000/svg"
+        style="border: 0; min-width: 700px; ;" class="bg-base-300 p-5">
+        <g (click)="checkDisponibilitaTavolo(tavoli[6])" id="7" transform="matrix(1, 0, 0, 1, -1, -23)">
+          <rect [ngStyle]="{ fill: tavoli[6].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120"
+            height="80" stroke="black" stroke-width="2"></rect>
+          <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            7</text>
+          <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
         </g>
-        <g id="13" transform="matrix(1, 0, 0, 1, 87.18, -15)">
-          <rect (click)="checkDisponibilitaTavolo(tavoli[12])"
-            [ngStyle]="{ fill: tavoli[12].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
-            height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-          <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 13</text>
-          <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-          <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        <g transform="matrix(1, 0, 0, 1, 1, 0)">
+          <g (click)="checkDisponibilitaTavolo(tavoli[9])" id="10" transform="matrix(1, 0, 0, 1, -23.796585, -15)">
+            <rect [ngStyle]="{ fill: tavoli[9].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
+              height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+            <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 10</text>
+            <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+            <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          </g>
+          <g id="13" transform="matrix(1, 0, 0, 1, 87.18, -15)">
+            <rect (click)="checkDisponibilitaTavolo(tavoli[12])"
+              [ngStyle]="{ fill: tavoli[12].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
+              height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+            <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 13</text>
+            <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+            <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          </g>
         </g>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[1])" id="2"
-        transform="matrix(1, 0, 0, 1, -25.33184814453125, -2.846324920654297)">
-        <circle [ngStyle]="{ fill: tavoli[1].isAvailable ? '#86EFAC' : '#FCA5A5' }" cx="-104.977" cy="246.088" r="60"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></circle>
-        <text x="-134.977" y="251.088" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          2</text>
-        <circle cx="-104.977" cy="176.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-44.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-44.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-104.977" cy="316.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-164.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-164.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[0])" id="1">
-        <circle [ngStyle]="{ fill: tavoli[0].isAvailable ? '#86EFAC' : '#FCA5A5' }" cx="-130.309" cy="69.533" r="60"
-          stroke-width="2" stroke="black" fill="#d3d3d3"></circle>
-        <text style="white-space: pre; font-size: 16px;" x="-160.309" y="74.533" font-size="16" fill="black">Tavolo
-          1</text>
-        <circle cx="-130.309" cy="-0.467" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
-        <circle cx="-70.309" cy="29.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
-        <circle cx="-70.309" cy="109.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
-        <circle cx="-130.309" cy="139.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
-        <circle cx="-190.309" cy="109.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
-        <circle cx="-190.309" cy="29.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[2])" id="3"
-        transform="matrix(1, 0, 0, 1, -25.33159065246582, 168.4060516357422)">
-        <circle [ngStyle]="{ fill: tavoli[2].isAvailable ? '#86EFAC' : '#FCA5A5' }" cx="-104.977" cy="246.088" r="60"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></circle>
-        <text x="-134.977" y="251.088" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          3</text>
-        <circle cx="-104.977" cy="176.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-44.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-44.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-104.977" cy="316.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-164.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="-164.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[3])" id="4" transform="matrix(1, 0, 0, 1, -214.00000000000006, -23)">
-        <rect [ngStyle]="{ fill: tavoli[3].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-        <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          4</text>
-        <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[4])" id="5" transform="matrix(1, 0, 0, 1, -211.69709777832037, 145)">
-        <rect [ngStyle]="{ fill: tavoli[4].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-        <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          5</text>
-        <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke-width="2" stroke="black"></circle>
-        <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[7])" id="8" transform="matrix(1, 0, 0, 1, -1, 145)">
-        <rect [ngStyle]="{ fill: tavoli[7].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-        <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          8</text>
-        <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[5])" id="6" transform="matrix(1, 0, 0, 1, -215.5352630615235, 322)">
-        <rect [ngStyle]="{ fill: tavoli[5].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-        <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          6</text>
-        <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g (click)="checkDisponibilitaTavolo(tavoli[8])" id="9" transform="matrix(1, 0, 0, 1, -1, 322)">
-        <rect [ngStyle]="{ fill: tavoli[8].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120" height="80"
-          fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-        <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
-          9</text>
-        <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-        <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-      </g>
-      <g transform="matrix(1, 0, 0, 1, 0.2187900096176918, 171.1087646484375)">
-        <g (click)="checkDisponibilitaTavolo(tavoli[10])" id="11" transform="matrix(1, 0, 0, 1, -23.796585, -15)">
-          <rect [ngStyle]="{ fill: tavoli[10].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
-            height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-          <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 11</text>
-          <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-          <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        <g (click)="checkDisponibilitaTavolo(tavoli[1])" id="2"
+          transform="matrix(1, 0, 0, 1, -25.33184814453125, -2.846324920654297)">
+          <circle [ngStyle]="{ fill: tavoli[1].isAvailable ? '#86EFAC' : '#FCA5A5' }" cx="-104.977" cy="246.088" r="60"
+            fill="#d3d3d3" stroke="black" stroke-width="2"></circle>
+          <text x="-134.977" y="251.088" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            2</text>
+          <circle cx="-104.977" cy="176.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-44.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-44.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-104.977" cy="316.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-164.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-164.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
         </g>
-        <g (click)="checkDisponibilitaTavolo(tavoli[13])" id="14" transform="matrix(1, 0, 0, 1, 87.180023, -15.000001)">
-          <rect [ngStyle]="{ fill: tavoli[13].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
-            height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-          <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 14</text>
-          <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-          <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        <g (click)="checkDisponibilitaTavolo(tavoli[0])" id="1">
+          <circle [ngStyle]="{ fill: tavoli[0].isAvailable ? '#86EFAC' : '#FCA5A5' }" cx="-130.309" cy="69.533" r="60"
+            stroke-width="2" stroke="black" fill="#d3d3d3"></circle>
+          <text style="white-space: pre; font-size: 16px;" x="-160.309" y="74.533" font-size="16" fill="black">Tavolo
+            1</text>
+          <circle cx="-130.309" cy="-0.467" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
+          <circle cx="-70.309" cy="29.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
+          <circle cx="-70.309" cy="109.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
+          <circle cx="-130.309" cy="139.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
+          <circle cx="-190.309" cy="109.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
+          <circle cx="-190.309" cy="29.533" r="10" stroke-width="2" stroke="black" fill="#a9a9a9"></circle>
         </g>
-      </g>
-      <g transform="matrix(1, 0, 0, 1, 0.2187900096176918, 347.6640625)">
-        <g (click)="checkDisponibilitaTavolo(tavoli[11])" id="12" transform="matrix(1, 0, 0, 1, -23.796585, -15)">
-          <rect [ngStyle]="{ fill: tavoli[11].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
-            height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-          <text style="font-size: 13px; white-space: pre;" x="488.656" y="84.627">Tavolo 12</text>
-          <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-          <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        <g (click)="checkDisponibilitaTavolo(tavoli[2])" id="3"
+          transform="matrix(1, 0, 0, 1, -25.33159065246582, 168.4060516357422)">
+          <circle [ngStyle]="{ fill: tavoli[2].isAvailable ? '#86EFAC' : '#FCA5A5' }" cx="-104.977" cy="246.088" r="60"
+            fill="#d3d3d3" stroke="black" stroke-width="2"></circle>
+          <text x="-134.977" y="251.088" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            3</text>
+          <circle cx="-104.977" cy="176.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-44.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-44.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-104.977" cy="316.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-164.977" cy="286.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="-164.977" cy="206.088" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
         </g>
-        <g (click)="checkDisponibilitaTavolo(tavoli[14])" id="15" transform="matrix(1, 0, 0, 1, 87.180023, -15.000001)">
-          <rect [ngStyle]="{ fill: tavoli[14].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
-            height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
-          <text style="font-size: 13px; white-space: pre;" x="488.656" y="84.627">Tavolo 15</text>
-          <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
-          <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        <g (click)="checkDisponibilitaTavolo(tavoli[3])" id="4"
+          transform="matrix(1, 0, 0, 1, -214.00000000000006, -23)">
+          <rect [ngStyle]="{ fill: tavoli[3].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120"
+            height="80" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+          <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            4</text>
+          <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
         </g>
-      </g>
-    </svg>
+        <g (click)="checkDisponibilitaTavolo(tavoli[4])" id="5"
+          transform="matrix(1, 0, 0, 1, -211.69709777832037, 145)">
+          <rect [ngStyle]="{ fill: tavoli[4].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120"
+            height="80" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+          <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            5</text>
+          <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke-width="2" stroke="black"></circle>
+          <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        </g>
+        <g (click)="checkDisponibilitaTavolo(tavoli[7])" id="8" transform="matrix(1, 0, 0, 1, -1, 145)">
+          <rect [ngStyle]="{ fill: tavoli[7].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120"
+            height="80" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+          <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            8</text>
+          <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        </g>
+        <g (click)="checkDisponibilitaTavolo(tavoli[5])" id="6" transform="matrix(1, 0, 0, 1, -215.5352630615235, 322)">
+          <rect [ngStyle]="{ fill: tavoli[5].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120"
+            height="80" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+          <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            6</text>
+          <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        </g>
+        <g (click)="checkDisponibilitaTavolo(tavoli[8])" id="9" transform="matrix(1, 0, 0, 1, -1, 322)">
+          <rect [ngStyle]="{ fill: tavoli[8].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="250" y="50" width="120"
+            height="80" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+          <text x="279.232" y="96.162" font-size="16" fill="black" style="white-space: pre; font-size: 16px;">Tavolo
+            9</text>
+          <circle cx="277" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="277" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          <circle cx="344" cy="140" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+        </g>
+        <g transform="matrix(1, 0, 0, 1, 0.2187900096176918, 171.1087646484375)">
+          <g (click)="checkDisponibilitaTavolo(tavoli[10])" id="11" transform="matrix(1, 0, 0, 1, -23.796585, -15)">
+            <rect [ngStyle]="{ fill: tavoli[10].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
+              height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+            <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 11</text>
+            <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+            <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          </g>
+          <g (click)="checkDisponibilitaTavolo(tavoli[13])" id="14"
+            transform="matrix(1, 0, 0, 1, 87.180023, -15.000001)">
+            <rect [ngStyle]="{ fill: tavoli[13].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
+              height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+            <text style="font-size: 13px; white-space: pre;" x="489.656" y="84.627">Tavolo 14</text>
+            <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+            <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          </g>
+        </g>
+        <g transform="matrix(1, 0, 0, 1, 0.2187900096176918, 347.6640625)">
+          <g (click)="checkDisponibilitaTavolo(tavoli[11])" id="12" transform="matrix(1, 0, 0, 1, -23.796585, -15)">
+            <rect [ngStyle]="{ fill: tavoli[11].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
+              height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+            <text style="font-size: 13px; white-space: pre;" x="488.656" y="84.627">Tavolo 12</text>
+            <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+            <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          </g>
+          <g (click)="checkDisponibilitaTavolo(tavoli[14])" id="15"
+            transform="matrix(1, 0, 0, 1, 87.180023, -15.000001)">
+            <rect [ngStyle]="{ fill: tavoli[14].isAvailable ? '#86EFAC' : '#FCA5A5' }" x="487.614" y="50" width="60"
+              height="60" fill="#d3d3d3" stroke="black" stroke-width="2"></rect>
+            <text style="font-size: 13px; white-space: pre;" x="488.656" y="84.627">Tavolo 15</text>
+            <circle cx="517" cy="40" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+            <circle cx="517" cy="120" r="10" fill="#a9a9a9" stroke="black" stroke-width="2"></circle>
+          </g>
+        </g>
+      </svg>
+    </div>
   </div>
 </div>
