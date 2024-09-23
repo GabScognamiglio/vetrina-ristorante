@@ -15,8 +15,7 @@ export class HomeComponent implements OnInit {
     this.themeSrv.currentTheme$.subscribe((theme: string) => {
       this.currentTheme = theme;
     });
-  }
-
+  }  
   
   openPDF(){
     const pdfUrl= "../../../assets/docs/prova_menu.pdf"
