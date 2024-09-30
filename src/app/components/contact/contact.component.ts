@@ -2,6 +2,16 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactFormService } from 'src/app/service/contact-form.service';
 import { ThemeService } from 'src/app/service/theme.service';
+import { environment } from 'src/environments/environment';
+
+
+const googleMapsApiKey = environment.googleMapsApiKey;
+
+const script = document.createElement('script');
+script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}`;
+script.async = true;
+script.defer = true;
+document.head.appendChild(script);
 
 @Component({
   selector: 'app-contact',
