@@ -29,6 +29,7 @@ export class MappaTavoliComponent {
   isModalVisible = false; 
   modalMessage = ''; 
   modalType = ''; 
+  orariFiltrati!: string[];
 
 
   constructor(private prenotazioniSrv: PrenotazioniService, private cd: ChangeDetectorRef) {
@@ -65,32 +66,29 @@ export class MappaTavoliComponent {
 
   eliminaOrariPassati() {
     const today = new Date();
-    const formattedToday = today.toISOString().split('T')[0];; // Formatta la data odierna nel formato YYYY-MM-dd
+    const formattedToday = today.toISOString().split('T')[0];
 
     if (this.selectedDate === formattedToday) {
       const currentHour = today.getHours();
 
-      this.orari = this.orari.filter(orario => {
+      this.orariFiltrati = this.orari.filter(orario => {
         const [hour] = orario.split(':').map(Number);
-        return hour >= currentHour;
+        return hour > currentHour;
       });
     }
     else {
-      this.orari=["13:00", "14:30", "18:00", "20:00", "21:30"]
+      this.orariFiltrati=["13:00", "14:30", "18:00", "20:00", "21:30"]
     }
-    this.selectedTime = this.orari[0]
+    this.selectedTime = this.orariFiltrati[0]
   }
 
   onDateChange() {
     this.prenotazioniSrv.getDisponibilita(this.selectedDate).subscribe((data) => {
-      this.tavoli = data;
-      
-      this.updateAvailability();this.eliminaOrariPassati()
-
+      this.tavoli = data;      
+      this.updateAvailability();
+      this.eliminaOrariPassati()
     });
   }
-
-
 
   checkDisponibilitaTavolo(tavolo: any) {
     this.selectedTable = tavolo;
@@ -114,6 +112,11 @@ export class MappaTavoliComponent {
       (response) => {
         this.modalMessage = 'Prenotazione effettuata con successo!';
         this.modalType = 'success';
+
+        setTimeout(() => {
+          console.log('Eseguendo reload...');
+          window.location.reload();
+        }, 3000);
       },
       (error) => {
         this.modalMessage = 'Si è verificato un errore durante la prenotazione.';
@@ -121,13 +124,7 @@ export class MappaTavoliComponent {
         console.error(error);
       }
     );
-    setTimeout(() => {
-
-      window.location.reload()
-    }, 2500);
   }
-
-
 
   updatePersoneLimits() {
     if (this.selectedTable) {
@@ -145,8 +142,6 @@ export class MappaTavoliComponent {
     }
     this.persone = this.minPersone;
   }
-
-
 
 }
 

@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent {
-
+  openPDF(){
+    const pdfUrl= "../../../assets/docs/prova_menu.pdf"
+    window.open( pdfUrl, '_blank');
+  }
 }

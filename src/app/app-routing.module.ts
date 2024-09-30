@@ -3,7 +3,6 @@ import { Route, RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { AboutComponent } from './components/about/about.component';
-import { EventsComponent } from './components/events/events.component';
 import { JobsComponent } from './components/jobs/jobs.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MappaTavoliComponent } from './components/mappa-tavoli/mappa-tavoli.component';
@@ -20,10 +19,6 @@ const routes: Route[] = [
   {
     path: 'about',
     component: AboutComponent,
-  },
-  {
-    path: 'events',
-    component: EventsComponent,
   },
   {
     path: 'jobs',

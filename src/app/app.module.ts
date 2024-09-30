@@ -12,7 +12,6 @@ import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { AboutComponent } from './components/about/about.component';
-import { EventsComponent } from './components/events/events.component';
 import { JobsComponent } from './components/jobs/jobs.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -36,7 +35,6 @@ const routes: Route[] = [
     FooterComponent,
     MenuComponent,
     AboutComponent,
-    EventsComponent,
     JobsComponent,
     ContactComponent,
     MappaTavoliComponent

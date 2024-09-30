@@ -2,18 +2,23 @@
   <section>
     <div class="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8 lg:pt-20">
       <div class="mb-4">
-        <div class="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
+        <div class="mb-6 text-center sm:text-center md:mx-auto md:mb-12">
           <p class="text-base font-semibold uppercase tracking-wide">
             Prenota
           </p>
           <h2 class=" mb-4 font-bold tracking-tight text-5xl">
             Scegli qui il tuo tavolo
           </h2>
-          <p class="monts-italic mt-10">
-            Seleziona data e orario e scegli il tuo tavolo a seconda della disponibilità!
-            In caso di prenotazioni maggiori di 10 persone è consigliabile chiamare direttamente al numero 0665656565,
-            il nostro staff vi risponderà e troverà la soluzione migliore per voi.
-          </p>
+          <div class="mt-10 text-xl monts-italic" style="line-height: 2.5rem;">
+            <p>Seleziona data e orario e scegli il tuo tavolo a seconda della disponibilità!
+              In caso di prenotazioni maggiori di 10 persone è consigliabile chiamare direttamente al numero 0665656565,
+              il nostro staff vi risponderà e troverà la soluzione migliore per voi.</p>
+
+            <p class="mt-5">
+              A prenotazione effettuata, riceverai una mail con tutte le info (data, orario e tavolo).
+            </p>
+
+          </div>
         </div>
       </div>
     </div>
@@ -103,7 +108,7 @@
 
 
 <div class="w-full max-w-full" style="max-width: 1000px; margin: 30px auto;">
-  <h4 class="h4 text-center font-bold" style="margin-bottom: 40px;">MAPPA TAVOLI</h4>
+  <h4 class="h3 text-center font-bold" style="margin-bottom: 40px;">MAPPA TAVOLI</h4>
   <div>
     <div class="p-4 flex justify-between flex-wrap" style="align-items: center;">
       <div class="flex">
@@ -112,12 +117,12 @@
           <input type="date" id="datePicker" [(ngModel)]="selectedDate" (change)="onDateChange()"
             class="input input-bordered w-full max-w-xs" [min]="minDate" />
         </div>
-  
+
         <div class="mb-4">
           <label for="timeSelect" class="block mb-3 ms-1 font-bold">Orario:</label>
           <select id="timeSelect" [(ngModel)]="selectedTime" (change)="updateAvailability()"
             class="select select-bordered w-full max-w-xs">
-            <option *ngFor="let time of orari;" [value]="time">{{ time }}</option>
+            <option *ngFor="let time of orariFiltrati;" [value]="time">{{ time }}</option>
           </select>
         </div>
       </div>
